@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'; // Add useEffect here
+import { useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import './index.css';
@@ -9,7 +10,27 @@ gsap.registerPlugin(ScrollTrigger);
 const App = () => {
   const container = useRef(null);
   const marqueeRef = useRef(null); // Reference for the logo marquee
+  const [result, setResult] = useState("");
 
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setResult("Sending....");
+    const formData = new FormData(event.target);
+    formData.append("access_key", "cceb08d1-ed15-49ff-85de-c682213abae1");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      setResult("Success! We will contact you soon.");
+      event.target.reset();
+    } else {
+      setResult("Error. Please try again.");
+    }
+  };
   const sentence = "Building Foundations With Reliable Manpower";
   const words = sentence.split(" ");
 
@@ -347,11 +368,35 @@ const App = () => {
   hoverElements.forEach(el => {
     el.onmouseenter = () => gsap.to(".custom-cursor", { scale: 4, opacity: 0.5 });
     el.onmouseleave = () => gsap.to(".custom-cursor", { scale: 1, opacity: 1 });
-  });
+  })
 
+  // FORM
 
+  const ContactForm = () => {
+    const [result, setResult] = useState("");
 
+    const onSubmit = async (event) => {
+      event.preventDefault();
+      setResult("Processing....");
+      const formData = new FormData(event.target);
 
+      formData.append("access_key", "cceb08d1-ed15-49ff-85de-c682213abae1");
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setResult("Request Sent Successfully!");
+        event.target.reset();
+      } else {
+        setResult("Error! Please try again.");
+      }
+    };
+  };
 
 
 
@@ -361,6 +406,7 @@ const App = () => {
   // last
 
   return (
+
     // THE FIX: This div MUST wrap EVERYTHING
     <div ref={container} className="layout-wrapper">
 
@@ -823,77 +869,104 @@ const App = () => {
         </div>
       </section>
 
-      {/* --- 11. CONTACT SECTION --- */}
+      
+
+      {/* Right Side: Contact Form */}
+      {/* --- CONTACT SECTION --- */}
       <section className="contact-section" id="contact">
         <div className="contact-container">
 
-          {/* Left Side: Contact Info */}
-          <div className="contact-info">
-            <h4 className="contact-subtitle">Get In Touch</h4>
-            <h2 className="contact-title">Ready to <span>Scale?</span></h2>
-            <p className="contact-desc">
-              Connect with Mehsana's most reliable manpower partner. We are here to help you solve your workforce challenges.
-            </p>
+          {/* THE WRAPPER THAT FIXES THE SIDE-BY-SIDE LAYOUT */}
+          <div className="contact-flex-layout">
 
-            <div className="info-list">
-              <div className="info-item">
-                <div className="info-icon">📍</div>
-                <div className="info-text">
-                  <h5>Our Office</h5>
-                  <p style={{ fontWeight: 'bold', color: 'crimson' }}> F-6 , Parekh Point , Above Madhvi Dairy
-                    Radhanpur Road , Mehsana </p>
+            {/* LEFT SIDE: CONTACT INFO */}
+            <div className="contact-info-side">
+              
+              <h2 className="info-title">Ready to <span>Scale?</span></h2>
+              <p className="info-description">
+                Mehsana's leading provider for industrial labor and specialized contracts.
+                Reach out to solve your workforce challenges today.
+              </p>
+
+              <div className="direct-contact-list">
+                <div className="contact-item-box">
+                  <div className="c-icon">📍</div>
+                  <div className="c-text">
+                    <h5>Location</h5>
+                    <p>F-6, Parekh Point, Above Madhvi Dairy, Radhanpur Road, Mehsana</p>
+                  </div>
                 </div>
-              </div>
-              <div className="info-item">
-                <div className="info-icon">📞</div>
-                <div className="info-text">
-                  <h5>Call Us</h5>
-                  <p style={{ fontWeight: 'bold', color: 'crimson' }}>+91  73 83 69 5555</p>
+                <div className="contact-item-box">
+                  <div className="c-icon">📞</div>
+                  <div className="c-text">
+                    <h5>Call Us</h5>
+                    <p>+91 73 83 69 5555</p>
+                  </div>
                 </div>
-              </div>
-              <div className="info-item">
-                <div className="info-icon">✉️</div>
-                <div className="info-text">
-                  <h5>Email Us</h5>
-                  <p style={{ fontWeight: 'bold', color: 'crimson' }}>SiyaEnterprise1124@gmail.com</p>
+                <div className="contact-item-box">
+                  <div className="c-icon">✉️</div>
+                  <div className="c-text">
+                    <h5>Email</h5>
+                    <p>SiyaEnterprise1124@gmail.com</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Right Side: Contact Form */}
-          <div className="contact-form-box">
-            <form className="main-form">
-              <div className="form-group">
-                <label>Full Name</label>
-                <input type="text" placeholder="Your Name" required />
+            {/* RIGHT SIDE: YOUR FORM CODE (Kept exactly as you provided) */}
+            <div className="contact-form-wrapper">
+              <div className="form-header">
+                <span className="form-tag">// SECURE_CHANNEL</span>
+                <h2 className="form-main-title">Business <span>Inquiry</span></h2>
               </div>
-              <div className="form-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="email@company.com" required />
-              </div>
-              <div className="form-group">
-                <label>Subject</label>
-                <select>
-                  <option>Hire Manpower</option>
-                  <option>Project Inquiry</option>
-                  <option>Job Application</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Message</label>
-                <textarea rows="5" placeholder="How can we help you?"></textarea>
-              </div>
-              <button type="submit" className="form-btn">
-                Send Inquiry <span>→</span>
-              </button>
-            </form>
-          </div>
 
+              <form className="modern-form" onSubmit={onSubmit}>
+                <div className="form-grid">
+                  <div className="input-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="John Doe" required />
+                  </div>
+                  <div className="input-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="john@company.com" required />
+                  </div>
+                  <div className="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" placeholder="+91 00000 00000" required />
+                  </div>
+                  <div className="input-group">
+                    <label>Company Name</label>
+                    <input type="text" name="company" placeholder="Organization Ltd." />
+                  </div>
+                  <div className="input-group full-width">
+                    <label>Required Service</label>
+                    <select name="service" required>
+                      <option value="" disabled selected>Select a Service</option>
+                      <option value="industrial-labor">Industrial Labor</option>
+                      <option value="management-staffing">Management Staffing</option>
+                      <option value="technical-support">Technical Support</option>
+                      <option value="hr-compliance">HR & Compliance</option>
+                      <option value="other">Other Inquiry</option>
+                    </select>
+                  </div>
+                  <div className="input-group full-width">
+                    <label>Message</label>
+                    <textarea name="message" rows="4" placeholder="How can we help you solve your workforce challenges?" required></textarea>
+                  </div>
+                </div>
+
+                <button type="submit" className="modern-submit-btn">
+                  <span className="btn-text">Transmit Request</span>
+                  <span className="btn-icon">→</span>
+                </button>
+
+                <p className={`status-msg ${result.includes("Success") ? "success" : ""}`}>{result}</p>
+              </form>
+            </div>
+
+          </div> {/* End of flex layout */}
         </div>
       </section>
-
       {/* --- 12. MAP SECTION --- */}
       <section className="map-section">
         <div className="map-wrapper">
@@ -959,11 +1032,11 @@ const App = () => {
                 </div>
                 <div className="contact-item">
                   <span className="c-icon">📞</span>
-                  <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+                  <p><a href="tel:+919876543210">+91 90 16 00 8716</a></p>
                 </div>
                 <div className="contact-item">
                   <span className="c-icon">✉️</span>
-                  <p style={{ fontWeight: 'bold', color: 'crimson' }}><a href="mailto:info@akasenterprises.com">SiyaEnterprise1124@gmail.com</a></p>
+                  <p style={{ fontWeight: 'bold', color: 'crimson' }}><a href="mailto:info@akasenterprises.com">akasenterprises@hotmail.com</a></p>
                 </div>
               </div>
             </div>
@@ -979,6 +1052,13 @@ const App = () => {
 
         </div>
       </footer>
+      <form onSubmit={onSubmit}>
+        <input type="text" name="name" required />
+        <input type="email" name="email" required />
+        <textarea name="message" required></textarea>
+        <button type="submit">Submit</button>
+        <p>{result}</p>
+      </form>
 
     </div>
 
@@ -987,5 +1067,7 @@ const App = () => {
 
   );
 }
+
+
 
 export default App;
