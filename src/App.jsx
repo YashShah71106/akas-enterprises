@@ -7,10 +7,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from '@studio-freight/lenis'
 gsap.registerPlugin(ScrollTrigger);
 
+
+
 const App = () => {
   const container = useRef(null);
   const marqueeRef = useRef(null); // Reference for the logo marquee
   const [result, setResult] = useState("");
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openIndex, setOpenIndex] = useState(-1);
+  const faqs = [
+    { q: "How quickly can you deploy workforce?", a: "Depending on the scale, we can deploy a verified workforce of 50-100 personnel within 48 to 72 hours." },
+    { q: "Do you handle labor law compliance?", a: "Yes, we handle 100% of PF, ESIC, and all statutory industrial compliance documentation." },
+    { q: "What industries do you specialize in?", a: "We specialize in Construction, Manufacturing, Oil & Gas, and Warehouse logistics." }
+  ];
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -54,6 +64,25 @@ const App = () => {
       lenis.destroy();
     };
   }, []);
+
+  // anchoring
+  // --- SMOOTH SCROLL FOR LINKS ---
+  const links = document.querySelectorAll('a[href^="#"]');
+  links.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+
+      if (targetElement) {
+        lenis.scrollTo(targetElement, {
+          offset: -80, // Adjust this based on your navbar height
+          duration: 1.5,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      }
+    });
+  });
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -398,6 +427,8 @@ const App = () => {
     };
   };
 
+  // faqs
+
 
 
 
@@ -409,6 +440,11 @@ const App = () => {
 
     // THE FIX: This div MUST wrap EVERYTHING
     <div ref={container} className="layout-wrapper">
+      <div className="custom-cursor"></div>
+      <a href="https://wa.me/917383695555" className="whatsapp-float" target="_blank" rel="noopener noreferrer">
+        <div className="wa-tooltip">Chat with us</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" />
+      </a>
 
       {/* 1. Preloader (Must be inside) */}
       <div className="preloader">
@@ -419,19 +455,58 @@ const App = () => {
           </div>
         </div>
       </div>
-
+      {/* humburger menu */}
+      <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
+        <div className="close-menu" onClick={() => setIsMenuOpen(false)}>✕</div>
+        <div className="mobile-links">
+          <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
+          <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
+          <a href="#services" onClick={() => setIsMenuOpen(false)}>Services</a>
+          <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+        </div>
+      </div>
       {/* 2. Custom Cursor (Must be inside) */}
-      <div className="custom-cursor"></div>
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-left">
-          <h1>AKAS <span>ENTERPRISES</span></h1>
+          <div className="nav-logo">
+            {/* The Logo Mark */}
+            <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30 80L50 20" stroke="white" strokeWidth="10" strokeLinecap="round" />
+              <path d="M70 80L50 20" stroke="white" strokeWidth="10" strokeLinecap="round" />
+              <path d="M38 58H62" stroke="#ff3333" strokeWidth="12" strokeLinecap="square" />
+            </svg>
+
+            {/* The Brand Name */}
+            <div className="logo-text">
+              AKAS <span>ENTERPRISES</span>
+            </div>
+          </div>
         </div>
-        <div className="nav-right">
+
+        {/* Desktop Links (Hidden on Mobile) */}
+        <div className="nav-right desktop-links">
           <a href="#home">Home</a>
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#contact">Contact</a>
+        </div>
+
+        {/* Hamburger Icon (Visible only on Mobile) */}
+        <div className="menu-toggle" onClick={() => setIsMenuOpen(true)}>
+          <div className="line"></div>
+          <div className="line"></div>
+        </div>
+
+        {/* Fullscreen Mobile Overlay */}
+        <div className="mobile-menu">
+          <div className="close-menu" onClick={() => setIsMenuOpen(false)}>✕</div>
+          <div className="mobile-links">
+            <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
+            <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
+            <a href="#services" onClick={() => setIsMenuOpen(false)}>Services</a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+          </div>
         </div>
       </nav>
 
@@ -869,7 +944,7 @@ const App = () => {
         </div>
       </section>
 
-      
+
 
       {/* Right Side: Contact Form */}
       {/* --- CONTACT SECTION --- */}
@@ -881,7 +956,7 @@ const App = () => {
 
             {/* LEFT SIDE: CONTACT INFO */}
             <div className="contact-info-side">
-              
+
               <h2 className="info-title">Ready to <span>Scale?</span></h2>
               <p className="info-description">
                 Mehsana's leading provider for industrial labor and specialized contracts.
@@ -967,6 +1042,39 @@ const App = () => {
           </div> {/* End of flex layout */}
         </div>
       </section>
+      {/* FAQ"S */}
+      <section className="faq-section">
+        <div className="faq-container">
+          <h4 className="faq-subtitle">// COMMON_QUESTIONS</h4>
+          <h2 className="faq-title">Frequently Asked <span>Questions</span></h2>
+
+          <div className="faq-list">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className={`faq-item ${openIndex === index ? "active" : ""}`}
+                onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
+              >
+                <div className="faq-question">
+                  <h3>{faq.q}</h3>
+                  <span className="faq-plus">{openIndex === index ? "−" : "+"}</span>
+                </div>
+
+                {/* This wrapper handles the sliding animation */}
+                <div className="faq-answer">
+                  <div className="answer-inner">
+                    <p>{faq.a}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
+
       {/* --- 12. MAP SECTION --- */}
       <section className="map-section">
         <div className="map-wrapper">
@@ -1052,13 +1160,7 @@ const App = () => {
 
         </div>
       </footer>
-      <form onSubmit={onSubmit}>
-        <input type="text" name="name" required />
-        <input type="email" name="email" required />
-        <textarea name="message" required></textarea>
-        <button type="submit">Submit</button>
-        <p>{result}</p>
-      </form>
+
 
     </div>
 

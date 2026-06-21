@@ -45,6 +45,37 @@ body {
   color: #ff3131;
 }
 
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.logo-text span {
+  color: #ff3333;
+  display: block;
+  /* Puts Enterprises slightly smaller below if you want */
+  font-size: 10px;
+  letter-spacing: 4px;
+  margin-top: 2px;
+}
+
+/* Hover effect for the logo */
+.nav-logo:hover svg path {
+  stroke-width: 12;
+  transition: all 0.3s ease;
+}
+
 /* Hero Section Styling */
 .hero-section {
   position: relative;
@@ -1683,4 +1714,264 @@ body {
   width: 0%;
   height: 100%;
   background-color: #ff3333;
+}
+
+/* WHATSAPP BUTTON */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background-color: #25d366;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.wa-tooltip {
+  position: absolute;
+  right: 80px;
+  background: white;
+  color: black;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.whatsapp-float:hover .wa-tooltip {
+  opacity: 1;
+}
+
+/* FAQS */
+
+.faq-section {
+  background-color: #000;
+  padding: 120px 0;
+  width: 100%;
+}
+
+.faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.faq-subtitle {
+  color: #ff3333;
+  font-family: monospace;
+  font-weight: 800;
+  letter-spacing: 5px;
+  font-size: 12px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.faq-title {
+  color: #fff;
+  font-size: clamp(32px, 5vw, 55px);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 60px;
+}
+
+.faq-title span {
+  color: transparent;
+  -webkit-text-stroke: 1px #333;
+}
+
+/* --- THE FIX: INTERACTIVE ITEM LOGIC --- */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background-color: #080808;
+  border: 1px solid #1a1a1a;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* THIS ENABLES THE SLIDE ANIMATION */
+  display: grid;
+  grid-template-rows: auto 0fr;
+}
+
+.faq-item:hover {
+  border-color: #333;
+  background-color: #0a0a0a;
+}
+
+/* Active state logic */
+.faq-item.active {
+  border-color: #ff3333;
+  background-color: #0a0000;
+  grid-template-rows: auto 1fr;
+  /* Opens the answer row */
+}
+
+.faq-question {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  /* Prevent text selection while clicking */
+  user-select: none;
+}
+
+.faq-question h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.faq-item.active .faq-question h3 {
+  color: #ff3333;
+}
+
+.faq-icon {
+  color: #444;
+  font-size: 24px;
+  font-weight: 300;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  /* Rotates + into x */
+  color: #ff3333;
+}
+
+/* --- THE FIX: ANSWER WRAPPER --- */
+.faq-answer {
+  overflow: hidden;
+  /* Necessary for grid-row animation */
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+  visibility: visible;
+  opacity: 1;
+}
+
+.faq-answer p {
+  color: #888;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0 30px 30px 30px;
+  /* Padding only shows when open */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .faq-container {
+    padding: 0 20px;
+  }
+
+  .faq-question {
+    padding: 20px;
+  }
+
+  .faq-question h3 {
+    font-size: 16px;
+  }
+
+  .faq-title {
+    font-size: 32px;
+  }
+}
+
+/* humberger menu */
+
+/* --- MOBILE MENU STYLES --- */
+.menu-toggle {
+  display: none;
+  /* Hidden on desktop */
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.menu-toggle .line {
+  width: 30px;
+  height: 2px;
+  background-color: #fff;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  /* Hidden off-screen by default */
+  width: 100%;
+  height: 100vh;
+  background-color: #050505;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: right 0.5s cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+/* When the state is true, this class is added via logic below */
+.mobile-menu.active {
+  right: 0;
+}
+
+.close-menu {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  font-size: 30px;
+  color: #ff3333;
+  cursor: pointer;
+}
+
+.mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  text-align: center;
+}
+
+.mobile-links a {
+  font-size: 40px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* RESPONSIVE MEDIA QUERY */
+@media (max-width: 768px) {
+  .desktop-links {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
 }
